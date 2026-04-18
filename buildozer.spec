@@ -1,10 +1,10 @@
 [app]
 title = My Kivy App
-package.name = myapp
-package.domain = org.test
+package.name = mykivyapp
+package.domain = org.example
 source.dir =.
 source.include_exts = py,png,jpg,kv,atlas
-version = 0.1
+version = 1.0
 requirements = python3,kivy==2.3.0
 orientation = portrait
 osx.python_version = 3
@@ -21,5 +21,6 @@ android.sdk = 33
 android.build_tools = 33.0.2
 android.archs = arm64-v8a, armeabi-v7a
 android.accept_sdk_license = True
-android.gradle_dependencies =
 p4a.branch = develop
+p4a.local_recipes =
+android.gradle_dependencies =
