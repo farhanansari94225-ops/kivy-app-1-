@@ -24,3 +24,4 @@ android.accept_sdk_license = True
 p4a.branch = develop
 p4a.local_recipes =
 android.gradle_dependencies =
+android.sdk_path = /home/runner/android-sdk
