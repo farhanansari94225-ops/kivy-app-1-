@@ -33,6 +33,11 @@ jobs:
           pip install --upgrade pip
           pip install Cython==0.29.36 buildozer==1.5.0
 
+      - name: Clean Buildozer Cache
+        run: |
+          rm -rf .buildozer
+          rm -rf ~/.buildozer
+
       - name: Build APK
         env:
           BUILDOZER_WARN_ON_ROOT: 0
