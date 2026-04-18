@@ -25,3 +25,5 @@ p4a.branch = develop
 p4a.local_recipes =
 android.gradle_dependencies =
 android.sdk_path = /home/runner/android-sdk
+android.ndk_path = /home/runner/android-ndk
+p4a.hook = true
