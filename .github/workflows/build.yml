@@ -1,4 +1,4 @@
-name: Build APK Final Fix
+name: Build APK Nuclear Fix
 on: [push, workflow_dispatch]
 
 jobs:
@@ -19,28 +19,42 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: 11076708
-          packages: 'platforms;android-33 build-tools;33.0.2 platform-tools'
-          accept-android-sdk-licenses: true
-
-      - name: Install Buildozer
+      - name: Install System Deps
         run: |
           sudo apt update
           sudo apt install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+
+      - name: Install Android SDK + Build Tools
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_HOME=$HOME/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          cd $ANDROID_SDK_ROOT/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q commandlinetools-linux-11076708_latest.zip
+          mv cmdline-tools latest
+          cd $OLDPWD
+
+          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
+          # ये लाइन सारी License अपने आप Accept कर देगी
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+
+      - name: Install Buildozer
+        run: |
           pip install --upgrade pip
           pip install Cython==0.29.36 buildozer==1.5.0
 
-      - name: Clean Buildozer Cache
+      - name: Nuke Buildozer Cache
         run: |
-          rm -rf .buildozer
-          rm -rf ~/.buildozer
+          rm -rf.buildozer ~/.buildozer
 
       - name: Build APK
         env:
           BUILDOZER_WARN_ON_ROOT: 0
+          ANDROID_SDK_ROOT: /home/runner/android-sdk
+          ANDROID_HOME: /home/runner/android-sdk
+          PATH: /home/runner/android-sdk/build-tools/33.0.2:/home/runner/android-sdk/platform-tools:/home/runner/android-sdk/cmdline-tools/latest/bin:${{ env.PATH }}
         run: |
           buildozer android debug
 
