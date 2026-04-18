@@ -1,4 +1,4 @@
-name: Build APK Final
+name: Build APK Final Fix
 on: [push, workflow_dispatch]
 
 jobs:
@@ -24,6 +24,7 @@ jobs:
         with:
           cmdline-tools-version: 11076708
           packages: 'platforms;android-33 build-tools;33.0.2 platform-tools'
+          accept-android-sdk-licenses: true
 
       - name: Install Buildozer
         run: |
